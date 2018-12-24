@@ -1,0 +1,45 @@
+{
+    "name": "pigvelop/laravel-graylog",
+    "description": "Gelf Handler for Laravel Monolog.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Caique Benassi Bertolozzi",
+            "email": "caiquebb@gmail.com",
+            "homepage": "https://github.com/caiquebb"
+        }
+    ],
+    "homepage": "https://github.com/pigvelop/laravel-graylog",
+    "keywords": ["Laravel", "Graylog"],
+    "require": {
+        "illuminate/support": "~5.5",
+        "monolog/monolog": "~1.12",
+        "graylog2/gelf-php": "~1.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pigvelop\\LaravelGraylog\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pigvelop\\LaravelGraylog\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pigvelop\\LaravelGraylog\\LaravelGraylogServiceProvider"
+            ],
+            "aliases": {
+                "LaravelGraylog": "Pigvelop\\LaravelGraylog\\Facades\\LaravelGraylog"
+            }
+        }
+    }
+}
