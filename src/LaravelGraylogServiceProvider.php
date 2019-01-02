@@ -39,7 +39,7 @@ class LaravelGraylogServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('laravelgraylog', function ($app) {
-            return new LaravelGraylog;
+            return new LaravelGraylog($app, $app->config['laravel-graylog']);
         });
     }
 

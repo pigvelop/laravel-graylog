@@ -2,11 +2,9 @@
 
 namespace Pigvelop\LaravelGraylog;
 
-use Illuminate\Support\Facades\Config;
 use Gelf\Publisher;
 use Gelf\Transport\UdpTransport;
 use Monolog\Handler\GelfHandler;
-use Illuminate\Support\Facades\Log;
 
 /**
  * LaravelGraylog Class
@@ -14,49 +12,43 @@ use Illuminate\Support\Facades\Log;
 class LaravelGraylog
 {
     /**
-     * Enable/Disable GELF Hanlder
+     * The application instance.
      *
-     * @var boolean
+     * @var \Illuminate\Contracts\Foundation\Application
      */
-    protected $gelfHandler;
+    protected $app;
 
     /**
-     * GELF Server hostname.
+     * The service configuration
      *
-     * @var string
+     * @var array
      */
-    protected $gelfHost;
-
-    /**
-     * GELF Server port number.
-     *
-     * @var int
-     */
-    protected $gelfPort;
+    protected $config;
 
     /**
      * Create instance for LaravelGraylog
      */
-    public function __construct()
+    public function __construct($app, $config)
     {
-        $this->gelfHandler = Config::get('laravel-graylog.gelf_handler');
-        $this->gelfHost = Config::get('laravel-graylog.gelf_host');
-        $this->gelfPort = Config::get('laravel-graylog.gelf_port');
+        $this->app = $app;
+        $this->config = $config;
     }
 
     /**
      * Push Monolog Handler for Gelf.
-     *
+     *'
      * @return void
      */
     public function pushHandler()
     {
-        if ($this->gelfHandler === 'configure') {
-            app()->configureMonologUsing(function ($monolog) {
+        if ($this->config['gelf_handler'] === 'configure') {
+            $this->app->configureMonologUsing(function ($monolog) {
                 $monolog->pushHandler($this->createGelfHandler());
+
+                return $monolog;
             });
-        } elseif ($this->gelfHandler || $this->gelfHandler === 'push') {
-            Log::getMonolog()->pushHandler($this->createGelfHandler());
+        } elseif ($this->config['gelf_handler'] || $this->config['gelf_handler'] === 'push') {
+            $this->app['log']->pushHandler($this->createGelfHandler());
         }
     }
 
@@ -71,8 +63,8 @@ class LaravelGraylog
         
         $publisher->addTransport(
             new UdpTransport(
-                $this->gelfHost,
-                $this->gelfPort,
+                $this->config['gelf_host'],
+                $this->config['gelf_port'],
                 UdpTransport::CHUNK_SIZE_LAN
             )
         );
