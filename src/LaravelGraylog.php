@@ -43,21 +43,27 @@ class LaravelGraylog
     {
         if ($this->config['gelf_handler'] === 'configure') {
             $this->app->configureMonologUsing(function ($monolog) {
-                $monolog->pushHandler($this->createGelfHandler());
+                $monolog->pushHandler(new GelfHandler($this->getGelfPublisher()));
 
                 return $monolog;
             });
         } elseif ($this->config['gelf_handler'] || $this->config['gelf_handler'] === 'push') {
-            $this->app['log']->pushHandler($this->createGelfHandler());
+            if ($this->isLumen()) {
+                $monolog = $this->app['Psr\Log\LoggerInterface'];
+            } else {
+                $monolog = $this->app['log']->getMonolog();
+            }
+
+            $monolog->pushHandler(new GelfHandler($this->getGelfPublisher()));
         }
     }
 
     /**
-     * Create a Gelf Handler instance.
+     * Create a Gelf Publisher.
      *
-     * @return Monolog\Handler\GelfHandler
+     * @return Publisher
      */
-    protected function createGelfHandler() : object
+    public function getGelfPublisher() : Publisher
     {
         $publisher = new Publisher();
         
@@ -68,7 +74,17 @@ class LaravelGraylog
                 UdpTransport::CHUNK_SIZE_LAN
             )
         );
-        
-        return new GelfHandler($publisher);
+
+        return $publisher;
+    }
+
+    /**
+     * Check if app uses Lumen.
+     *
+     * @return bool
+     */
+    protected function isLumen() : bool
+    {
+        return str_contains($this->app->version(), 'Lumen');
     }
 }
