@@ -37,8 +37,8 @@ class LaravelGraylogServiceProvider extends ServiceProvider
         $this->app->singleton('laravelgraylog', function ($app) {
             return new LaravelGraylog($app->config['laravel-graylog']);
         });
-        
-        $this->mergeConfigFrom(__DIR__.'/../config/logging.php', 'logging');
+
+        $this->mergeConfigFrom(__DIR__.'/../config/logging-channel.php', 'logging.channels');
     }
 
     /**
