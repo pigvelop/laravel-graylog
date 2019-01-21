@@ -19,7 +19,7 @@ return [
             'driver' => 'monolog',
             'handler' => GelfHandler::class,
             'handler_with' => [
-                'publisher' => app('laravelgraylog')->getGelfPublisher(),
+                'publisher' => app(Pigvelop\LaravelGraylog\LaravelGraylog::class)->getGelfPublisher(),
             ],
             'formatter' => GelfMessageFormatter::class
         ],
