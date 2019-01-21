@@ -12,13 +12,6 @@ use Monolog\Handler\GelfHandler;
 class LaravelGraylog
 {
     /**
-     * The application instance.
-     *
-     * @var \Illuminate\Contracts\Foundation\Application
-     */
-    protected $app;
-
-    /**
      * The service configuration
      *
      * @var array
@@ -28,9 +21,8 @@ class LaravelGraylog
     /**
      * Create instance for LaravelGraylog
      */
-    public function __construct($app, $config)
+    public function __construct($config)
     {
-        $this->app = $app;
         $this->config = $config;
     }
 
