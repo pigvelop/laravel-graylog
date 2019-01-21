@@ -2,6 +2,7 @@
 
 use Monolog\Handler\GelfHandler;
 use Monolog\Formatter\GelfMessageFormatter;
+use Pigvelop\LaravelGraylog\Facades\LaravelGraylog;
 
 return [
 
@@ -19,7 +20,7 @@ return [
             'driver' => 'monolog',
             'handler' => GelfHandler::class,
             'handler_with' => [
-                'publisher' => app()->make('laravelgraylog')->getGelfPublisher(),
+                'publisher' => LaravelGraylog::getGelfPublisher(),
             ],
             'formatter' => GelfMessageFormatter::class
         ],

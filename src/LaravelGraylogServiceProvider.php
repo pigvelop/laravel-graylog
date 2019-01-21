@@ -32,12 +32,13 @@ class LaravelGraylogServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-graylog.php', 'laravel-graylog');
-        $this->mergeConfigFrom(__DIR__.'/../config/logging.php', 'logging');
-
+        
         // Register the service the package provides.
         $this->app->singleton('laravelgraylog', function ($app) {
             return new LaravelGraylog($app->config['laravel-graylog']);
         });
+        
+        $this->mergeConfigFrom(__DIR__.'/../config/logging.php', 'logging');
     }
 
     /**
