@@ -23,9 +23,6 @@ class LaravelGraylogServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
         }
-
-        // Push Monolog Handler if configured;
-        LaravelGraylogFacade::pushHandler();
     }
 
     /**
@@ -36,6 +33,7 @@ class LaravelGraylogServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-graylog.php', 'laravel-graylog');
+        $this->mergeConfigFrom(__DIR__.'/../config/logging.php', 'logging');
 
         // Register the service the package provides.
         $this->app->singleton('laravelgraylog', function ($app) {

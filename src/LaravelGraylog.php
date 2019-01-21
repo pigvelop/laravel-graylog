@@ -35,30 +35,6 @@ class LaravelGraylog
     }
 
     /**
-     * Push Monolog Handler for Gelf.
-     *'
-     * @return void
-     */
-    public function pushHandler()
-    {
-        if ($this->config['gelf_handler'] === 'configure') {
-            $this->app->configureMonologUsing(function ($monolog) {
-                $monolog->pushHandler(new GelfHandler($this->getGelfPublisher()));
-
-                return $monolog;
-            });
-        } elseif ($this->config['gelf_handler'] || $this->config['gelf_handler'] === 'push') {
-            if ($this->isLumen()) {
-                $monolog = $this->app['Psr\Log\LoggerInterface'];
-            } else {
-                $monolog = $this->app['log']->getMonolog();
-            }
-
-            $monolog->pushHandler(new GelfHandler($this->getGelfPublisher()));
-        }
-    }
-
-    /**
      * Create a Gelf Publisher.
      *
      * @return Publisher
@@ -76,15 +52,5 @@ class LaravelGraylog
         );
 
         return $publisher;
-    }
-
-    /**
-     * Check if app uses Lumen.
-     *
-     * @return bool
-     */
-    protected function isLumen() : bool
-    {
-        return str_contains($this->app->version(), 'Lumen');
     }
 }
