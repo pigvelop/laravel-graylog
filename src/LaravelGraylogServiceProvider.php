@@ -3,7 +3,6 @@
 namespace Pigvelop\LaravelGraylog;
 
 use Illuminate\Support\ServiceProvider;
-use Pigvelop\LaravelGraylog\Facades\LaravelGraylog as LaravelGraylogFacade;
 
 class LaravelGraylogServiceProvider extends ServiceProvider
 {
