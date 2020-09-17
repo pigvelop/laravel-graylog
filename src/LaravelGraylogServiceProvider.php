@@ -3,7 +3,6 @@
 namespace Pigvelop\LaravelGraylog;
 
 use Illuminate\Support\ServiceProvider;
-use Pigvelop\LaravelGraylog\Facades\LaravelGraylog as LaravelGraylogFacade;
 
 class LaravelGraylogServiceProvider extends ServiceProvider
 {
@@ -23,9 +22,6 @@ class LaravelGraylogServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
         }
-
-        // Push Monolog Handler if configured;
-        LaravelGraylogFacade::pushHandler();
     }
 
     /**
@@ -36,11 +32,13 @@ class LaravelGraylogServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-graylog.php', 'laravel-graylog');
-
+        
         // Register the service the package provides.
         $this->app->singleton('laravelgraylog', function ($app) {
-            return new LaravelGraylog($app, $app->config['laravel-graylog']);
+            return new LaravelGraylog($app->config['laravel-graylog']);
         });
+
+        $this->mergeConfigFrom(__DIR__.'/../config/logging-channel.php', 'logging.channels');
     }
 
     /**
